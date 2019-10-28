@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/*package frc.robot.commands;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
@@ -26,7 +26,7 @@ public class GimbalCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  Robot.Gimbal.stabilise(Robot.m_oi.getAxisX(), Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ(), 0);
+  //Robot.Gimbal.stabiliser(Robot.m_drive.getAccX(),Robot.m_drive.getAccZ(),Robot.m_drive.getAccZ(), 0);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -45,4 +45,4 @@ public class GimbalCommand extends Command {
   @Override
   protected void interrupted() {
   }
-}*/
+}

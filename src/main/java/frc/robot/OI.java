@@ -94,5 +94,18 @@ public class OI {
     else if(z>0.4){z=z-0.3;}
     return z*z*z;
   }
-  
-}
+  public boolean droite(){
+    return m_stick.getRawButtonPressed(8);
+  }  
+  public boolean gauche(){
+    return m_stick.getRawButtonPressed(7);
+  }
+    boolean fieldToggle = true;
+  public boolean fieldSwitch(){   
+    if (m_stick.getRawButtonPressed(1)){
+      fieldToggle=!fieldToggle;
+    }
+    return fieldToggle;
+  }
+
+}  

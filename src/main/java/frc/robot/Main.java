@@ -20,6 +20,7 @@ public final class Main {
 
   // Ca fais pas mal rien
   public static void main(String... args) {
+    // aaaaaaa
     RobotBase.startRobot(Robot::new);
   }
 }

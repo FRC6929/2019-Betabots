@@ -1,14 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrainSubsystem extends Subsystem {
 	CANSparkMax m_frontLeft;	
@@ -18,31 +19,151 @@ public class DriveTrainSubsystem extends Subsystem {
     MecanumDrive m_mecanum;
     CANEncoder e_frontLeft;
     AHRS ahrs;
-    
-    @Override
-    public void initDefaultCommand() {
-        // uhmmm
-        m_frontLeft = new CANSparkMax(1,MotorType.kBrushless);
+    double X_Acc;
+    double Y_Acc;
+
+
+public DriveTrainSubsystem(){
+    m_frontLeft = new CANSparkMax(1,MotorType.kBrushless);
         m_rearLeft = new CANSparkMax(2,MotorType.kBrushless);        
         m_rearRight = new CANSparkMax(3, MotorType.kBrushless);
         m_frontRight = new CANSparkMax(4, MotorType.kBrushless);
         e_frontLeft = new CANEncoder(m_frontLeft);
+        e_frontLeft.setPosition(0);
+        
         m_mecanum = new MecanumDrive(m_frontLeft, m_rearLeft, m_frontRight, m_rearRight);
         ahrs = new AHRS();
+        ahrs.reset(); 
+        
+        X_Acc = 0;
+        Y_Acc = 0;
+        
+        //Valeurs PID
+        }
+
+    @Override
+    public void initDefaultCommand() {
+        
+        
+    }
+    public void reset(){
+        e_frontLeft.setPosition(0);
+    }
+    public void bouger(double y,double x,double z){
+        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4);
+        SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());
+    }
+    public void bougerField(double y,double x,double z){
+        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4, ahrs.getAngle());
+        SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());SmartDashboard.putNumber("yeet",Math.round(ahrs.getVelocityX() * 100.0) / 100.0);
+    }
+    
+    
+    
+    public double getEncoder(){
+        SmartDashboard.putNumber("ENCODER", e_frontLeft.getPosition());
+        return e_frontLeft.getPosition();
         
     }
     
-    public void bouger(double y,double x,double z){
-        m_mecanum.driveCartesian(y*0.5, x*0.5, -z*0.5, ahrs.getAngle());
+    public double getVelocity(){
+        
+        return e_frontLeft.getVelocity()/2100;
     }
-    public void autoBouger(double y, double x, double z){
-        m_mecanum.driveCartesian(y*0.5, x*0.5, -z*0.5, ahrs.getAngle());
-    }
-    public double getEncoder(){
-        return e_frontLeft.getPosition();
-    }
+
     public double getAngle(){
         return ahrs.getAngle();
     }
+
+    public void resetAngle(){
+        ahrs.reset();
+    }
+
+    int avg_rate = 50;
+    double[] average_g_x = new double[avg_rate];
+    double[] average_g_y = new double[avg_rate];
+
+    int i_x = 0; // Position dans l'array sur X
+    int i_y = 0; // Position dans l'array sur Y
+
+    static double acc_x;
+    static double acc_y;
+
+    static double fetch_x;
+    static double fetch_y;
+
+    public double getAccX()
+    {
+        //SmartDashboard.putNumberArray("x", average_g_x);
+        // System.out.println(acc_x);
+        return acc_x;
+    }
+
+    public double getAccY()
+    {
+        // SmartDashboard.putNumberArray("y", average_g_y);
+        return acc_y;
+    }
+
+    public void updateAccX()
+    {
+        double raw = ahrs.getRawAccelX();
+
+        if(i_x == avg_rate - 1) {
+            i_x = 0;
+        }
+        else{
+            i_x++;
+        }
+
+        // System.out.println("Iterateur X:" + i_x);
+
+        average_g_x[i_x] = raw;
+
+        double res = 0.0;
+        if(fetch_x >= 50)
+        {
+            fetch_x = 0;
+            for(int i = 0; i < avg_rate; i++)
+            {
+                res += average_g_x[i];
+            }
     
+            res = res / (avg_rate - 1);
+            res = Math.round(res * 10.0) / 10.0;
+            acc_x = res;
+        }
+        fetch_x ++;
+    }
+
+    public void updateAccY()
+    {
+        double raw = ahrs.getRawAccelY();
+
+        if(i_y == avg_rate - 1){
+            i_y = 0;
+        }
+        else {
+            i_y++;
+        }
+
+        average_g_y[i_y] = raw;
+
+        double res = 0.0;
+
+        if(fetch_y >= 50)
+        {
+            fetch_y = 0;
+        for(int i = 0; i < avg_rate; i++)
+        {
+            res += average_g_x[i];
+        }
+
+        res = res / (avg_rate - 1);
+        res = Math.round(res * 10.0) / 10.0;
+        acc_y = res;
+
+        }
+        fetch_y++;
+    }
 }

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
  
-/*package frc.robot.subsystems;
+package frc.robot.subsystems;
  
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Servo;
@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj.Servo;
  * @version 0.1
  * @since   04/10/2019
  */
-/*public class GimbalSubsystem extends Subsystem {
+public class GimbalSubsystem extends Subsystem {
  
   Servo servoX;
   Servo servoY;
@@ -42,16 +42,16 @@ import edu.wpi.first.wpilibj.Servo;
   double yzVectorAngle;
  
   final double gConst = 9.80665;    //In m/s^2
-  final double particleMass = 0.5;  //In kg
+  final double particleMass = 0.454;  //In kg
   final int servoRange = 180;       //In deg
  
   @Override
   public void initDefaultCommand() {
-    servoX = new Servo(0);
-    servoY = new Servo(1);
+    servoX = new Servo(2);
+    servoY = new Servo(3);
   }
  
-  public void stabilise(double xAcc, double yAcc, double zRAcc, double armPos) {
+  public void stabiliser(double xAcc, double yAcc, double zRAcc, double armPos) {
    
     //Calculate X and Y translation force
     xForce = particleMass * (xAcc + (2*Math.PI*armPos * (zRAcc / 360)));
@@ -63,7 +63,7 @@ import edu.wpi.first.wpilibj.Servo;
     yzVectorAngle = (Math.atan2(weight, yForce)) * (360 / (2*Math.PI));
  
     //Set the servo angle accordingly
-    servoX.set((xzVectorAngle - 180)/180);
-    servoY.set((yzVectorAngle - 180)/180);
+    servoX.set(((xzVectorAngle - 180)/180)/2+0.5);
+    servoY.set(((yzVectorAngle - 180)/180)/2+0.5);
   }
-}*/
+}

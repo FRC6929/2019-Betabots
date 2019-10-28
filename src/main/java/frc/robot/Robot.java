@@ -9,28 +9,24 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-
-/* Classe ou tout se passe, le robot utilise
-des commandes, on peut "demander"(venant de l'ordi pilote) de commencer 
-l'execution d'une commande, mais l'execution de la commande
-va etre fais du coter du roborio*/
 public class Robot extends TimedRobot {
   //public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static DriveTrainSubsystem m_drive = new DriveTrainSubsystem();
-  //public static GimbalSubsystem Gimbal = new GimbalSubsystem();
-  //public static TestServo Servo = new TestServo();
+  public static GimbalSubsystem Gimbal = new GimbalSubsystem();
+  public static StabilisationSubsystem Stabilisateur = new StabilisationSubsystem();
   public static OI m_oi;
   
-  //SendableChooser<Integer> m_chooser = new SendableChooser<>();
+  SendableChooser<Integer> m_chooser = new SendableChooser<>();
    
   Command BougerCommand;
   Command AutoCommand;
-  //Command GimbalCommand;
-  //Command TestServoC;
+  Command GimbalCommand;
   // Fonction qui est executer quand le programme commence
   @Override
   public void robotInit() {
@@ -38,18 +34,35 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     BougerCommand = new BougerCommand();
     AutoCommand = new AutoCommand();
-    //GimbalCommand = new GimbalCommand();
-    //TestServoC = new TestServoC();
+    GimbalCommand = new GimbalCommand();
     // Options
-    /*m_chooser.addOption("Left", 1);
+    m_chooser.addOption("Left", 1);
     m_chooser.addOption("Right", 2);
-    SmartDashboard.putData("Auto mode", m_chooser);*/
-  
-    
-    
+    SmartDashboard.putData("Auto mode", m_chooser);
+
+    Thread a = new Thread(() -> {
+      while(!Thread.interrupted())
+      {
+        // not stuck anymore !!
+        m_drive.updateAccX();
+
+      }
+    });
+
+    Thread b = new Thread(() -> {
+      while(!Thread.interrupted())
+      {
+        // not stuck anymore !!
+        m_drive.updateAccY();
+
+      }
+    });
+
+    a.start();
+    b.start();
   }
 
-  // Fonction qui est executer regulierement lors du programme
+  // Fonction qui est executee regulierement lors du programme
   // pendant toute les phases  
   @Override
   public void robotPeriodic() {
@@ -63,7 +76,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-  //  Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
   }
 
   // Fonction qui est executer une fois lorsque le mode autonome commence  
@@ -79,7 +92,7 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
     
-    
+  
   }
 
   // Fonction appeller regulierement lors du mode autonome
@@ -96,10 +109,10 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    //GimbalCommand.start();  
-    //TestServoC.start();
     
-    //AutoCommand.cancel();
+    
+    
+    AutoCommand.cancel();
   }
 
   // Function appeller periodiquement pendant la 
@@ -107,8 +120,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-
-    
+    //GimbalCommand.start();  
     BougerCommand.start();
   }
 
