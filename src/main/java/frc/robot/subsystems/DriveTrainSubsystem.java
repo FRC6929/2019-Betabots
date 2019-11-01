@@ -1,9 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,14 +20,13 @@ public class DriveTrainSubsystem extends Subsystem {
     AHRS ahrs;
     double X_Acc;
     double Y_Acc;
-
+    double defaultAngle;
 
 public DriveTrainSubsystem(){
         m_frontLeft = new CANSparkMax(1,MotorType.kBrushless);
         m_rearLeft = new CANSparkMax(2,MotorType.kBrushless);        
-        m_rearRight = new CANSparkMax(3, MotorType.kBrushless);
-        m_frontRight = new CANSparkMax(4, MotorType.kBrushless);
-        
+        m_frontRight = new CANSparkMax(3, MotorType.kBrushless);
+        m_rearRight = new CANSparkMax(4, MotorType.kBrushless);
         m_frontLeft.setIdleMode(IdleMode.kBrake);
         m_rearLeft.setIdleMode(IdleMode.kBrake);
         m_frontRight.setIdleMode(IdleMode.kBrake);
@@ -42,6 +39,9 @@ public DriveTrainSubsystem(){
         ahrs = new AHRS();
         ahrs.reset(); 
         
+        defaultAngle = ahrs.getRoll();
+       
+       
         X_Acc = 0;
         Y_Acc = 0;
     }
@@ -59,7 +59,7 @@ public DriveTrainSubsystem(){
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());
     }
     public void bougerField(double y,double x,double z){
-        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4, ahrs.getAngle());
+        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4, (ahrs.getRoll()-defaultAngle));
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());SmartDashboard.putNumber("yeet",Math.round(ahrs.getVelocityX() * 100.0) / 100.0);
     }
     
@@ -77,7 +77,7 @@ public DriveTrainSubsystem(){
     }
 
     public double getAngle(){
-        return ahrs.getAngle();
+        return ahrs.getRoll();
     }
 
     public void resetAngle(){

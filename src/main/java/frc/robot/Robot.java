@@ -14,8 +14,17 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.AutoCommand;
+import frc.robot.commands.BougerCommand;
+import frc.robot.commands.CameraLightOff;
+import frc.robot.commands.CameraLightOn;
+import frc.robot.commands.GimbalCommand;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.GimbalSubsystem;
+import frc.robot.subsystems.SensorSubsystem;
+import frc.robot.subsystems.StabilisationSubsystem;
 
 public class Robot extends TimedRobot {
   //public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
@@ -23,12 +32,18 @@ public class Robot extends TimedRobot {
   public static GimbalSubsystem Gimbal = new GimbalSubsystem();
   public static StabilisationSubsystem Stabilisateur = new StabilisationSubsystem();
   public static OI m_oi;
-  
+  public static ArmSubsystem Brobot = new ArmSubsystem();
+  public static SensorSubsystem Sensor = new SensorSubsystem();
+  public static CameraSubsystem Camera = new CameraSubsystem();
+
+
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
    
   Command BougerCommand;
   Command AutoCommand;
   Command GimbalCommand;
+  Command CameraLightOn;
+  Command CameraLightOff;
   // Fonction qui est executer quand le programme commence
   @Override
   public void robotInit() {
@@ -37,6 +52,8 @@ public class Robot extends TimedRobot {
     BougerCommand = new BougerCommand();
     AutoCommand = new AutoCommand();
     GimbalCommand = new GimbalCommand();
+    CameraLightOn = new CameraLightOn();
+    CameraLightOff = new CameraLightOff();
     // Options
     m_chooser.addOption("Left", 1);
     m_chooser.addOption("Right", 2);
@@ -93,8 +110,6 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    
-  
   }
 
   // Fonction appeller regulierement lors du mode autonome
@@ -124,6 +139,14 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     //GimbalCommand.start();  
     BougerCommand.start();
+  
+    if(m_oi.lightToggle()==true){
+        CameraLightOn.start();
+    }
+  if(m_oi.lightToggle()==false){
+        CameraLightOff.start();
+    }
+  
   }
 
   // Fonction bizzarre, personne ce que ca fais

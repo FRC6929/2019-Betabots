@@ -9,6 +9,7 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -54,7 +55,7 @@ public class OI {
     m_stick = new Joystick(0);
   
   }
-
+public Boolean LightSwitch = false;
   public double filterAxis(double axis,double death)
   {
     if(axis < death && axis > -death)
@@ -107,5 +108,16 @@ public class OI {
     }
     return fieldToggle;
   }
-
+  
+  boolean lightToggle(){
+    
+    if (m_stick.getRawButton(11)){
+      LightSwitch = false;
+    }
+    if (m_stick.getRawButton(12)){
+      LightSwitch = true;
+    }
+    SmartDashboard.putBoolean("switch", LightSwitch);
+    return LightSwitch;
+  }
 }  
