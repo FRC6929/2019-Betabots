@@ -25,15 +25,15 @@ public class DriveTrainSubsystem extends Subsystem {
 
 
 public DriveTrainSubsystem(){
-    m_frontLeft = new CANSparkMax(1,MotorType.kBrushless);
+        m_frontLeft = new CANSparkMax(1,MotorType.kBrushless);
         m_rearLeft = new CANSparkMax(2,MotorType.kBrushless);        
         m_rearRight = new CANSparkMax(3, MotorType.kBrushless);
         m_frontRight = new CANSparkMax(4, MotorType.kBrushless);
         
-     m_frontLeft.setIdleMode(IdleMode.kBrake);
-      m_rearLeft.setIdleMode(IdleMode.kBrake);
-    m_frontRight.setIdleMode(IdleMode.kBrake);
-     m_rearRight.setIdleMode(IdleMode.kBrake);
+        m_frontLeft.setIdleMode(IdleMode.kBrake);
+        m_rearLeft.setIdleMode(IdleMode.kBrake);
+        m_frontRight.setIdleMode(IdleMode.kBrake);
+        m_rearRight.setIdleMode(IdleMode.kBrake);
         
         e_frontLeft = new CANEncoder(m_frontLeft);
         e_frontLeft.setPosition(0);
@@ -44,16 +44,14 @@ public DriveTrainSubsystem(){
         
         X_Acc = 0;
         Y_Acc = 0;
-        
-        //Valeurs PID
-        }
+    }
 
     @Override
     public void initDefaultCommand() {
         
         
     }
-    public void reset(){
+        public void reset(){
         e_frontLeft.setPosition(0);
     }
     public void bouger(double y,double x,double z){
