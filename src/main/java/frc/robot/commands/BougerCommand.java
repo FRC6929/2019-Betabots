@@ -15,7 +15,7 @@ public class BougerCommand extends Command {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   requires(Robot.m_drive);
-    requires(Robot.Gimbal);
+    requires(Robot.Stabilisateur);
 }
 
   // Called just before this Command runs the first time

@@ -4,6 +4,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -28,6 +29,12 @@ public DriveTrainSubsystem(){
         m_rearLeft = new CANSparkMax(2,MotorType.kBrushless);        
         m_rearRight = new CANSparkMax(3, MotorType.kBrushless);
         m_frontRight = new CANSparkMax(4, MotorType.kBrushless);
+        
+     m_frontLeft.setIdleMode(IdleMode.kBrake);
+      m_rearLeft.setIdleMode(IdleMode.kBrake);
+    m_frontRight.setIdleMode(IdleMode.kBrake);
+     m_rearRight.setIdleMode(IdleMode.kBrake);
+        
         e_frontLeft = new CANEncoder(m_frontLeft);
         e_frontLeft.setPosition(0);
         
@@ -66,9 +73,9 @@ public DriveTrainSubsystem(){
         
     }
     
-    public double getVelocity(){
+    public double getVelocityX(){
         
-        return e_frontLeft.getVelocity()/2100;
+        return ahrs.getVelocityX()/2100;
     }
 
     public double getAngle(){
@@ -86,8 +93,8 @@ public DriveTrainSubsystem(){
     int i_x = 0; // Position dans l'array sur X
     int i_y = 0; // Position dans l'array sur Y
 
-    static double acc_x;
-    static double acc_y;
+    public static double acc_x;
+    public static double acc_y;
 
     static double fetch_x;
     static double fetch_y;
@@ -120,9 +127,9 @@ public DriveTrainSubsystem(){
 
         average_g_x[i_x] = raw;
 
-        double res = 0.0;
-        if(fetch_x >= 50)
+        if(fetch_x >= 25)
         {
+            double res = 0.0;
             fetch_x = 0;
             for(int i = 0; i < avg_rate; i++)
             {
@@ -132,6 +139,7 @@ public DriveTrainSubsystem(){
             res = res / (avg_rate - 1);
             res = Math.round(res * 10.0) / 10.0;
             acc_x = res;
+           // System.out.println("x:" + acc_x);
         }
         fetch_x ++;
     }
@@ -149,20 +157,19 @@ public DriveTrainSubsystem(){
 
         average_g_y[i_y] = raw;
 
-        double res = 0.0;
-
-        if(fetch_y >= 50)
+        if(fetch_y >= 25)
         {
+            double y = 0.0;
             fetch_y = 0;
         for(int i = 0; i < avg_rate; i++)
         {
-            res += average_g_x[i];
+            y += average_g_y[i];
         }
 
-        res = res / (avg_rate - 1);
-        res = Math.round(res * 10.0) / 10.0;
-        acc_y = res;
-
+        y = y / (avg_rate - 1);
+        y = Math.round(y * 10.0) / 10.0;
+        acc_y = y;
+        //System.out.println("y:" + acc_y);
         }
         fetch_y++;
     }

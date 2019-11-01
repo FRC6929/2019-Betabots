@@ -21,7 +21,7 @@ public class StabilisationSubsystem extends Subsystem {
   Servo servoY;
   public StabilisationSubsystem(){
   servoX = new Servo(8);
-  servoY = new Servo(9);
+  servoY = new Servo(7);
   }
   @Override
   public void initDefaultCommand() {
@@ -48,7 +48,14 @@ public class StabilisationSubsystem extends Subsystem {
     servoY.set(0.6);
   }
   public void stabilise(){
-    servoX.set(-Robot.m_drive.getAccX()+0.4);
-    servoY.set(-(Robot.m_drive.getAccY())+0.5);
+    servoX.set(-Robot.m_drive.acc_x/10+0.4);
+    servoY.set(Robot.m_drive.acc_y/10+0.5);
+/*servoX.set(Robot.m_oi.getAxisX()+0.5);
+servoY.set(Robot.m_oi.getAxisY()+0.4);*/
+
   }
+  public void stabilise2(){
+    servoX.set((Robot.m_oi.getAxisX() - Robot.m_drive.getVelocityX())/10+0.4);
+  }
+
 }
