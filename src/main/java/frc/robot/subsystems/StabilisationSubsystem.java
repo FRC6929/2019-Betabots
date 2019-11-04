@@ -54,8 +54,8 @@ public class StabilisationSubsystem extends Subsystem {
 servoY.set(Robot.m_oi.getAxisY()+0.4);*/
 
   }
-  public void stabilise2(){
-    servoX.set((Robot.m_oi.getAxisX() - Robot.m_drive.getVelocityX())/10+0.4);
+  public void depose(){
+    servoX.set(1);
   }
 
 }

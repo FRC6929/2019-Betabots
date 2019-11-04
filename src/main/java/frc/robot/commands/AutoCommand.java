@@ -7,12 +7,12 @@
 
 package frc.robot.commands;
 
-
-
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+
 
 public class AutoCommand extends Command {
   
@@ -34,7 +34,7 @@ public class AutoCommand extends Command {
   
   public AutoCommand() {
     requires(Robot.m_drive);
-    requires(Robot.Gimbal);
+    requires(Robot.Stabilisateur);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   
@@ -67,10 +67,10 @@ public class AutoCommand extends Command {
     
     //On décide si la position que l'on veut est en angle ou en emplacement
 
-    if (etape == 1 || etape == 2 || etape == 4 || etape == 5){
+    if (etape == 1 || etape == 5){
       position = Robot.m_drive.getEncoder();
     }
-    if (etape == 3){
+    if (etape == 2 || etape == 4 || etape == 6){
       position = Robot.m_drive.getAngle();  
     }
   
@@ -80,13 +80,20 @@ public class AutoCommand extends Command {
     if (etape == 1){
       target = 37;
       }
-    if (etape == 2){
+    if (etape == 5){
       target = 15;
+    }
+    
+    
+    if (etape == 2){
+      target = 90;
       } 
-    if (etape == 3){
+    if (etape == 4){
       target = 45;
     }
-      
+    if (etape == 6){
+      target = 45;
+    }  
 
     SmartDashboard.putNumber("pos", position);
     SmartDashboard.putNumber("target", target);
@@ -106,7 +113,8 @@ public class AutoCommand extends Command {
 
       else if(position >= target){
         speed = 0;
-        
+        position = 0;
+        etape ++;
       }     
       if(speed > 1){
         speed = 1;
@@ -114,28 +122,91 @@ public class AutoCommand extends Command {
     
     
     //On indique dans quel sens le robot devrait rouler
-      if (etape == 1 || etape == 4){
+      if (etape == 1 || etape == 5){
         forward = speed;
         side = 0;
         rotate = 0;
         SmartDashboard.putNumber("speed", speed);
       }
-      if (etape == 2 || etape == 5){
-        side = speed;
-        forward = 0;
-        rotate = 0;
-      }
-      if (etape == 3){
+      
+      if (etape == 2 || etape == 6){
         rotate = speed;
         forward = 0;
         side = 0;
       }
       
+      if(etape == 4){
+        rotate = -speed;
+        forward = 0;
+        side = 0;
+      }
       
+      
+      
+      if(etape != 3 && etape != 7){
       Robot.m_drive.bouger(side, forward, rotate);
-      Robot.Gimbal.stabiliser(Robot.m_drive.getAccX(), Robot.m_drive.getAccY(), 0, 0);
+      Robot.Stabilisateur.stabilise();
+      }
+      
+      
+      
+      
+      if(etape == 3 || etape == 7){
+      double targetCount = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+      double targetX = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+      SmartDashboard.putNumber("xToTarget", targetX);
+
+      if(targetCount == 1)
+      {
+        double x = 0;
+        double y = 0; 
+        double z = 0;
+
+        NetworkTable t = NetworkTableInstance.getDefault().getTable("limelight");
+        double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+
+        if(etape == 3){
+          if(ta < 25)
+        {
+          x = 0.35/*.25*/;
+        }
+        if(ta > 25){
+          x = 0;
+          etape++;
+        }
+        }
+        
+        if(etape == 7){
+          if(ta < 50)
+        {
+          x = 0.35/*.25*/;
+        }
+        if(ta > 50){
+          x = 0;
+          etape++;
+        }
+        }
+        
+        
+        /*if(targetX > 0.1){
+          z = 0.25;
+        }
+        if(targetX < -0.1)
+        {
+          z = -0.25;
+        }*/
+        
+        z = targetX/54;
+        
+        Robot.m_drive.bouger(y,x,z);
+      }
     }
+    
+  if(etape == 8){
+    Robot.Stabilisateur.depose();
+  }
   
+  }
   
   
     // Make this return true when this Command no longer needs to run execute()

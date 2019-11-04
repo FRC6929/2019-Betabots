@@ -39,7 +39,7 @@ public DriveTrainSubsystem(){
         ahrs = new AHRS();
         ahrs.reset(); 
         
-        defaultAngle = ahrs.getRoll();
+        defaultAngle = ahrs.getYaw();
        
        
         X_Acc = 0;
@@ -51,7 +51,10 @@ public DriveTrainSubsystem(){
         
         
     }
-        public void reset(){
+    
+    
+    
+    public void reset(){
         e_frontLeft.setPosition(0);
     }
     public void bouger(double y,double x,double z){
@@ -59,7 +62,7 @@ public DriveTrainSubsystem(){
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());
     }
     public void bougerField(double y,double x,double z){
-        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4, (ahrs.getRoll()-defaultAngle));
+        m_mecanum.driveCartesian(y*0.4, x*0.4, -z*0.4, (ahrs.getYaw()-defaultAngle));
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());SmartDashboard.putNumber("yeet",Math.round(ahrs.getVelocityX() * 100.0) / 100.0);
     }
     

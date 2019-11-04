@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
     if(m_oi.lightToggle()==true){
         CameraLightOn.start();
     }
-  if(m_oi.lightToggle()==false){
+    if(m_oi.lightToggle()==false){
         CameraLightOff.start();
     }
   
