@@ -21,6 +21,7 @@ import frc.robot.commands.CameraLightOn;
 import frc.robot.commands.GimbalCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ChooserSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.GimbalSubsystem;
 import frc.robot.subsystems.SensorSubsystem;
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
   public static ArmSubsystem Brobot = new ArmSubsystem();
   public static SensorSubsystem Sensor = new SensorSubsystem();
   public static CameraSubsystem Camera = new CameraSubsystem();
-
+  public static ChooserSubsystem Chooser = new ChooserSubsystem();
 
   SendableChooser<Integer> m_chooser = new SendableChooser<>();
    
@@ -101,6 +102,7 @@ public class Robot extends TimedRobot {
   // Fonction qui est executer une fois lorsque le mode autonome commence  
   @Override
   public void autonomousInit() {
+    AutoCommand.cancel();
     //GimbalCommand.start();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -117,6 +119,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
   AutoCommand.start();
+  
   }
 
   // Fonction executer lors du debut du mode teleoperationelle

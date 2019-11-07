@@ -25,8 +25,8 @@ public class AutoCommand extends Command {
   
   double target;
   double position;
+  double rawposition;
   
-  double angle;
   double speed;
   
   //SendableChooser<Integer> auto_chooser = new SendableChooser<>();
@@ -35,53 +35,55 @@ public class AutoCommand extends Command {
   public AutoCommand() {
     requires(Robot.m_drive);
     requires(Robot.Stabilisateur);
+    requires(Robot.Chooser);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
   
-  forward = 0;
-  side = 0;
-  rotate = 0;
   
-  etape = 1;  
-  
-  target = 0;
-  speed = 0;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+  forward = 0;
+  side = 0;
+  rotate = 0;
   
+  etape = 1;
   
+  target = 5;
+  speed = 0;
+  
+  Robot.m_drive.reset();
 }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    SmartDashboard.putNumber("etape", etape);
     
-    // On veut la valeur absolue de position
-    
-    if(position < 0){
-      position = -position;
-    }
     
     //On décide si la position que l'on veut est en angle ou en emplacement
 
     if (etape == 1 || etape == 5){
-      position = Robot.m_drive.getEncoder();
+      rawposition = Robot.m_drive.getEncoder();
     }
     if (etape == 2 || etape == 4 || etape == 6){
-      position = Robot.m_drive.getAngle();  
+      rawposition = Robot.m_drive.getAngle();  
     }
   
-  
+    // On veut la valeur absolue de position
+    
+    position = Math.abs(rawposition);
+
+
     //On indique la distance souhaitée
 
     if (etape == 1){
       target = 37;
       }
     if (etape == 5){
-      target = 15;
+      target = 30;
     }
     
     
@@ -103,17 +105,24 @@ public class AutoCommand extends Command {
         speed = 0.2;
       }
       
-      if(position < target/2 && position > 0.8){
+      else if(position < target/2){
         speed = position / 8;
       }
 
-      else if(position >= target/2 && position < target){
+      else if(position < target - 0.8){
         speed = ((target - position) / (position / 4));
       }
 
+      else if(position < target){
+        speed = 0.2;
+      }
+      
       else if(position >= target){
         speed = 0;
         position = 0;
+        target = 0;
+        Robot.m_drive.reset();
+        Robot.m_drive.resetAngle();
         etape ++;
       }     
       if(speed > 1){
@@ -129,6 +138,8 @@ public class AutoCommand extends Command {
         SmartDashboard.putNumber("speed", speed);
       }
       
+
+      if(Robot.Chooser.getChooser() == "Left")
       if (etape == 2 || etape == 6){
         rotate = speed;
         forward = 0;
@@ -141,7 +152,18 @@ public class AutoCommand extends Command {
         side = 0;
       }
       
+      if(Robot.Chooser.getChooser() == "Right")
+      if (etape == 2 || etape == 6){
+        rotate = -speed;
+        forward = 0;
+        side = 0;
+      }
       
+      if(etape == 4){
+        rotate = speed;
+        forward = 0;
+        side = 0;
+      }
       
       if(etape != 3 && etape != 7){
       Robot.m_drive.bouger(side, forward, rotate);

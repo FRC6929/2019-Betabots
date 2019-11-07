@@ -48,8 +48,8 @@ public class StabilisationSubsystem extends Subsystem {
     servoY.set(0.6);
   }
   public void stabilise(){
-    servoX.set(-Robot.m_drive.acc_x/10+0.4);
-    servoY.set(Robot.m_drive.acc_y/10+0.5);
+    servoX.set(/*-Robot.m_drive.acc_x/10+*/0.4);
+    servoY.set(/*Robot.m_drive.acc_y/10+*/0.5);
 /*servoX.set(Robot.m_oi.getAxisX()+0.5);
 servoY.set(Robot.m_oi.getAxisY()+0.4);*/
 

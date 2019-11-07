@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.subsystems.StabilisationSubsystem;
 
 public class BougerCommand extends Command {
   public BougerCommand() {
@@ -35,10 +36,11 @@ public class BougerCommand extends Command {
   if(Robot.m_oi.fieldSwitch()==true){
   Robot.m_drive.bougerField(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());
     //Robot.Gimbal.stabiliser(Robot.m_drive.getAccX(), Robot.m_drive.getAccY(), 0, 0);
-  //Robot.Stabilisateur.stabilise();
+  Robot.Stabilisateur.stabilise();
     Robot.Sensor.updateSensor();
     SmartDashboard.putNumber("Distance",Robot.Sensor.getValue());
     Robot.Camera.isTarget();
+    
   }
 }
 
