@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,13 +19,23 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class ArmSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  CANSparkMax ArmMotor;
+  CANSparkMax ArMotor;
   public ArmSubsystem(){
-    ArmMotor = new CANSparkMax(5, MotorType.kBrushless);
+    ArMotor = new CANSparkMax(5, MotorType.kBrushed);
+    
   }
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+  ArMotor.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void BrasDefault(){
+    
+    ArMotor.
+  }
+  public void BrasExtended(){
+    ArMotor.
   }
 }
