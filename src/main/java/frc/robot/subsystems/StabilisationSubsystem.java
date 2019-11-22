@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -20,14 +19,14 @@ public class StabilisationSubsystem extends Subsystem {
   Servo servoX;
   Servo servoY;
   public StabilisationSubsystem(){
-  servoX = new Servo(8);
-  servoY = new Servo(7);
+  servoX = new Servo(0);
+  servoY = new Servo(1);
   }
   @Override
   public void initDefaultCommand() {
   }
   public void stabiliseDefault(){
-    servoX.set(0.4);
+    servoX.set(0.5);
     servoY.set(0.5);
   }
 
@@ -39,23 +38,27 @@ public class StabilisationSubsystem extends Subsystem {
     servoX.set(0.5);
     servoY.set(0.5);
   }
-  public void stabiliserGauche(){
+  public void stabiliseGauche(){
     servoX.set(0.4);
     servoY.set(0.4);
   }
-  public void stabiliserDroite(){
+  public void stabiliseDroite(){
     servoX.set(0.4);
     servoY.set(0.6);
   }
   public void stabilise(){
-    servoX.set(/*-Robot.m_drive.acc_x/10+*/0.4);
-    servoY.set(/*Robot.m_drive.acc_y/10+*/0.5);
-/*servoX.set(Robot.m_oi.getAxisX()+0.5);
-servoY.set(Robot.m_oi.getAxisY()+0.4);*/
-
+    
+    //servoX.set(Robot.m_drive.acc_x +0.4);
+    //servoY.set(-Robot.m_drive.acc_y + 0.5);
+  }
+  public void stabiliseX(double vitesse){
+    servoX.set(vitesse);
+  }
+  public void stabiliseY(double vitesse){
+    servoY.set(vitesse);
   }
   public void depose(){
     servoX.set(1);
   }
-
 }
+

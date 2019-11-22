@@ -7,12 +7,14 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.subsystems.StabilisationSubsystem;
 
 public class BougerCommand extends Command {
+  double vitesseXPrecedente = 0;
+  double vitesseYPrecedente = 0;
   public BougerCommand() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -29,19 +31,71 @@ public class BougerCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  if(Robot.m_oi.fieldSwitch()==false){
-  Robot.m_drive.bouger(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());
-    Robot.Gimbal.stabiliser(Robot.m_drive.getAccX(), Robot.m_drive.getAccY(), 0, 0);
+  
+  double vitesseX = Robot.m_drive.XSpeed();
+  double vitesseY = Robot.m_drive.YSpeed();
+  SmartDashboard.putNumber("x", vitesseX);
+  SmartDashboard.putNumber("y", vitesseY);
+  
+    if(Robot.m_oi.fieldSwitch()==false){
+  Robot.m_drive.bouger(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());    
   }
   if(Robot.m_oi.fieldSwitch()==true){
   Robot.m_drive.bougerField(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());
-    //Robot.Gimbal.stabiliser(Robot.m_drive.getAccX(), Robot.m_drive.getAccY(), 0, 0);
-  Robot.Stabilisateur.stabilise();
-    Robot.Sensor.updateSensor();
-    SmartDashboard.putNumber("Distance",Robot.Sensor.getValue());
-    Robot.Camera.isTarget();
-    
+
   }
+/*
+  if(Robot.m_oi.getAxisX() > x+0.3 || Robot.m_oi.getAxisX() < 0.3 && x > 0.3){
+    Robot.Stabilisateur.stabiliseArriere();
+  }
+  if(Robot.m_oi.getAxisX() < x-0.3 || Robot.m_oi.getAxisX() > 0.3 && x < 0.3){
+    Robot.Stabilisateur.stabiliseAvant();
+  }
+  if(Robot.m_oi.getAxisY() > y+0.3 || Robot.m_oi.getAxisY() < 0.3 && y > 0.3){
+    Robot.Stabilisateur.stabiliseGauche();
+  }
+  if(Robot.m_oi.getAxisX() < y-0.3 || Robot.m_oi.getAxisY() > 0.3 && y < 0.3){
+    Robot.Stabilisateur.stabiliseDroite();
+  }
+  */
+  SmartDashboard.putNumber("vitesseXPrécédente", vitesseXPrecedente);
+  double accelerationX = vitesseX - vitesseXPrecedente;
+  vitesseXPrecedente = vitesseX;
+  
+
+  SmartDashboard.putNumber("vitesseYPrecedente", vitesseYPrecedente);
+  double accelerationY = vitesseY - vitesseYPrecedente;
+  vitesseYPrecedente = vitesseY;
+
+  SmartDashboard.putNumber("AccelX", accelerationX);
+  SmartDashboard.putNumber("AccelY", accelerationY);
+  
+  
+  //Robot.Stabilisateur.stabilise();
+  //Robot.Stabilisateur.stabiliseDefault();
+  Robot.Sensor.getLeftValue();
+  Robot.Sensor.getRightValue();
+  Robot.Sensor.getBehindValue();
+  Robot.Camera.isTarget();
+
+  if(Robot.m_oi.getDepose() == true){
+    Robot.Stabilisateur.depose();
+  }
+  else{
+    Robot.Stabilisateur.stabiliseX(-accelerationX * 20 + 0.5);
+  }
+  Robot.Stabilisateur.stabiliseY(accelerationY * 8 + 0.4);
+  
+  
+  if(Robot.m_oi.BrasAngleToggle() == true){
+    Robot.Brobot.BrasDefault();
+    SmartDashboard.putBoolean("positionBras", true);
+  }
+  if(Robot.m_oi.BrasAngleToggle() == false){
+    Robot.Brobot.BrasExtended();
+    SmartDashboard.putBoolean("positionBras", false);
+  }
+
 }
 
   // Make this return true when this Command no longer needs to run execute()

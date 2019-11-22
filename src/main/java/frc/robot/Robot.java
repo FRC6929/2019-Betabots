@@ -8,6 +8,7 @@ Vous pouvez voler. En plus c pas vraiment copyrighté ;)
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -18,7 +19,6 @@ import frc.robot.commands.AutoCommand;
 import frc.robot.commands.BougerCommand;
 import frc.robot.commands.CameraLightOff;
 import frc.robot.commands.CameraLightOn;
-import frc.robot.commands.GimbalCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ChooserSubsystem;
@@ -45,6 +45,11 @@ public class Robot extends TimedRobot {
   Command GimbalCommand;
   Command CameraLightOn;
   Command CameraLightOff;
+
+  //DigitalInput Switch;
+
+  //Thread a;
+  //Thread b;
   // Fonction qui est executer quand le programme commence
   @Override
   public void robotInit() {
@@ -52,7 +57,6 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     BougerCommand = new BougerCommand();
     AutoCommand = new AutoCommand();
-    GimbalCommand = new GimbalCommand();
     CameraLightOn = new CameraLightOn();
     CameraLightOff = new CameraLightOff();
     // Options
@@ -60,26 +64,28 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Right", 2);
     SmartDashboard.putData("Auto mode", m_chooser);
 
-    Thread a = new Thread(() -> {
-      while(!Thread.interrupted())
-      {
-        // not stuck anymore !!
-        m_drive.updateAccX();
+    Robot.Brobot.BrasDefault();
+    //Switch = new DigitalInput(2); 
+    //a = new Thread(() -> {
+    //  while(!Thread.interrupted())
+    //  {
+    //    // not stuck anymore !!
+    //    m_drive.updateAccX();
+//
+    //  }
+    //});
+//
+    //b = new Thread(() -> {
+    //  while(!Thread.interrupted())
+    //  {
+    //    // not stuck anymore !!
+    //    m_drive.updateAccY();
+//
+    //  }
+    //});
 
-      }
-    });
-
-    Thread b = new Thread(() -> {
-      while(!Thread.interrupted())
-      {
-        // not stuck anymore !!
-        m_drive.updateAccY();
-
-      }
-    });
-
-    a.start();
-    b.start();
+    //a.start();
+    //b.start();
   }
 
   // Fonction qui est executee regulierement lors du programme
@@ -92,6 +98,8 @@ public class Robot extends TimedRobot {
   // La fonction qui est executer quand tu est en train de rager
   @Override
   public void disabledInit() {
+    //a.stop();
+    //b.stop();
   }
 
   @Override
@@ -118,8 +126,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-  AutoCommand.start();
-  
+    AutoCommand.start(); // whinning about my wife
   }
 
   // Fonction executer lors du debut du mode teleoperationelle
@@ -133,6 +140,7 @@ public class Robot extends TimedRobot {
     
     
     AutoCommand.cancel();
+
   }
 
   // Function appeller periodiquement pendant la 
@@ -150,6 +158,8 @@ public class Robot extends TimedRobot {
         CameraLightOff.start();
     }
   
+
+    //SmartDashboard.putBoolean("switchValue", !Switch.get());
   }
 
   // Fonction bizzarre, personne ce que ca fais
