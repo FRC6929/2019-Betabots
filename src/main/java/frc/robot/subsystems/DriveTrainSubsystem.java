@@ -68,19 +68,23 @@ public DriveTrainSubsystem(){
     
     public void reset(){
         e_frontLeft.setPosition(0);
+        e_frontRight.setPosition(0);
+        e_rearLeft.setPosition(0);
+        e_rearRight.setPosition(0);
     }
     public void bouger(double y,double x,double z){
-        m_mecanum.driveCartesian(-y*0.6*Robot.m_oi.Vitesse(), -x*0.6*Robot.m_oi.Vitesse(), -z*0.2);
+        m_mecanum.driveCartesian(-y*0.6*Robot.m_oi.Vitesse(), -x*0.6*Robot.m_oi.Vitesse(), -z*0.4);
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());
         SmartDashboard.putNumber("Angle", ahrs.getAngle());
     }
     public void bougerField(double y,double x,double z){
-        m_mecanum.driveCartesian(-y*0.6*Robot.m_oi.Vitesse(), -x*0.6*Robot.m_oi.Vitesse(), -z*0.2, ahrs.getAngle());
+        m_mecanum.driveCartesian(-y*0.6*Robot.m_oi.Vitesse(), -x*0.6*Robot.m_oi.Vitesse(), -z*0.4, ahrs.getAngle());
         SmartDashboard.putNumber("ENCODERSpeed", e_frontLeft.getVelocity());SmartDashboard.putNumber("yeet",Math.round(ahrs.getVelocityX() * 100.0) / 100.0);
     }
     public void bougerAuto(double y,double x,double z){
-        m_mecanum.driveCartesian(y*0.25, x*0.25, z);
+        m_mecanum.driveCartesian(y*0.5, x*0.5, z*0.4);
         SmartDashboard.putNumber("Angle", ahrs.getAngle());
+    
     }
     
     
@@ -108,6 +112,10 @@ public DriveTrainSubsystem(){
         ahrs.reset();
     }
     
+    public double XPosition(){
+        return e_rearLeft.getPosition() - e_rearRight.getPosition() / 2;
+    }
+
     public double XSpeed(){
         
         SmartDashboard.putNumber("XSpeed", e_rearRight.getVelocity() - e_rearLeft.getVelocity());

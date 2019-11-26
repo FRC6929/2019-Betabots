@@ -86,6 +86,9 @@ public class Robot extends TimedRobot {
 
     //a.start();
     //b.start();
+  
+  Robot.m_drive.reset();
+  Robot.m_drive.resetAngle();
   }
 
   // Fonction qui est executee regulierement lors du programme
@@ -110,7 +113,10 @@ public class Robot extends TimedRobot {
   // Fonction qui est executer une fois lorsque le mode autonome commence  
   @Override
   public void autonomousInit() {
-    AutoCommand.cancel();
+    //AutoCommand.cancel();
+    Robot.m_drive.reset();
+    Robot.m_drive.resetAngle();
+    AutoCommand.start();
     //GimbalCommand.start();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -126,7 +132,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    AutoCommand.start(); // whinning about my wife
+     // whinning about my wife
   }
 
   // Fonction executer lors du debut du mode teleoperationelle

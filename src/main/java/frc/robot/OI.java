@@ -78,32 +78,34 @@ public Boolean LightSwitch = true;
     }
   }
   
-  public double getAxisX()
+  public double getAxisY()
   {
     double x = 0;
     x = m_stick.getRawAxis(1);
     //x = filterAxis(x, 0.1);
     //if(x <0.1 && x>-0.1){x=0;}
-    return x*x*x/1.4;
+    return x*x*x;
   }
 
   // Retourne l'axe vertical du Joystick
-  public  double getAxisY()
+  public  double getAxisX()
   {
     double y = 0;
     y = m_stick.getRawAxis(0);
     //y = filterAxis(y, 0.1);
     //if(y <0.1 && y>-0.1){y=0;}
-    return y*y*y;
+    return y*y*y/1.4;
   }
   public  double getAxisZ()
   {
-    /*double z = 0;
+    double z = 0;
     z = m_stick.getRawAxis(2);
     if(z <0.4 && z>-0.4){z=0;}
     else if(z<-0.4){z=z+0.3;}
     else if(z>0.4){z=z-0.3;}
-    return z*z*z;*/
+    return z*z*z;
+    
+    /*
     if(m_stick.getRawButton(4)){
       return 1;
     }
@@ -113,6 +115,7 @@ public Boolean LightSwitch = true;
     else{
       return 0;
     }
+    */
   }
   public boolean droite(){
     return m_stick.getRawButtonPressed(8);
@@ -125,7 +128,7 @@ public Boolean LightSwitch = true;
     if (m_stick.getRawButtonPressed(1)){
       fieldToggle=!fieldToggle;
     }
-    return fieldToggle;
+    return false;
   }
   
   boolean lightToggle(){
@@ -139,14 +142,18 @@ public Boolean LightSwitch = true;
     SmartDashboard.putBoolean("switch", LightSwitch);*/
     return LightSwitch;
   }
-  boolean BrasPosition = true;
-  public boolean BrasAngleToggle(){
-    if(m_stick2_electric_boogaloo.getRawButton(2)){
-      BrasPosition = true;
+  int BrasPosition = 1;
+  public int BrasAngleToggle(){
+    if(m_stick2_electric_boogaloo.getRawButton(11)){
+      BrasPosition = 1;
     }
-    if(m_stick2_electric_boogaloo.getRawButton(3)){
-      BrasPosition = false;
-  }
+    if(m_stick2_electric_boogaloo.getRawButton(9)){
+      BrasPosition = 2;
+    }
+    if(m_stick2_electric_boogaloo.getRawButton(7)){
+      BrasPosition = 3;
+    }
+
   return BrasPosition;
   }
 

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class BougerCommand extends Command {
+  double OIX;
   double vitesseXPrecedente = 0;
   double vitesseYPrecedente = 0;
   public BougerCommand() {
@@ -20,7 +21,8 @@ public class BougerCommand extends Command {
     // eg. requires(chassis);
   requires(Robot.m_drive);
     requires(Robot.Stabilisateur);
-}
+  
+  }
 
   // Called just before this Command runs the first time
   @Override
@@ -31,17 +33,42 @@ public class BougerCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-  
+    
+    if(Robot.Sensor.getLeftValue() > 30 && Robot.Sensor.getRightValue() > 30){
+      OIX = Robot.m_oi.getAxisX();
+    }
+
+    if(Robot.Sensor.getLeftValue() < 30){
+      if(Robot.m_oi.getAxisX()<0){
+        OIX = Robot.m_oi.getAxisX()/3;
+      }
+      else{
+        OIX = Robot.m_oi.getAxisX();
+      }
+    }
+
+
+    if(Robot.Sensor.getRightValue() < 30){
+      if(Robot.m_oi.getAxisX()>0){
+        OIX = Robot.m_oi.getAxisX()/3;
+      }
+      else{
+        OIX = Robot.m_oi.getAxisX();
+      }
+    }
+    
+    SmartDashboard.putNumber("OIX", OIX);
+
   double vitesseX = Robot.m_drive.XSpeed();
   double vitesseY = Robot.m_drive.YSpeed();
   SmartDashboard.putNumber("x", vitesseX);
   SmartDashboard.putNumber("y", vitesseY);
   
     if(Robot.m_oi.fieldSwitch()==false){
-  Robot.m_drive.bouger(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());    
+  Robot.m_drive.bouger(OIX, Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ());    
   }
   if(Robot.m_oi.fieldSwitch()==true){
-  Robot.m_drive.bougerField(Robot.m_oi.getAxisY(), Robot.m_oi.getAxisX(), Robot.m_oi.getAxisZ());
+  Robot.m_drive.bougerField(Robot.m_oi.getAxisX(), Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ());
 
   }
 /*
@@ -82,18 +109,22 @@ public class BougerCommand extends Command {
     Robot.Stabilisateur.depose();
   }
   else{
-    Robot.Stabilisateur.stabiliseX(-accelerationX * 20 + 0.5);
+    Robot.Stabilisateur.stabiliseX(-accelerationX * 18 + 0.5);
   }
-  Robot.Stabilisateur.stabiliseY(accelerationY * 8 + 0.4);
+  Robot.Stabilisateur.stabiliseY(accelerationY * 9 + 0.4);
   
   
-  if(Robot.m_oi.BrasAngleToggle() == true){
+  if(Robot.m_oi.BrasAngleToggle() == 1){
     Robot.Brobot.BrasDefault();
-    SmartDashboard.putBoolean("positionBras", true);
+    SmartDashboard.putNumber("positionBras", 1);
   }
-  if(Robot.m_oi.BrasAngleToggle() == false){
-    Robot.Brobot.BrasExtended();
-    SmartDashboard.putBoolean("positionBras", false);
+  if(Robot.m_oi.BrasAngleToggle() == 2){
+    Robot.Brobot.BrasExtended1();
+    SmartDashboard.putNumber("positionBras", 2);
+  }
+  if(Robot.m_oi.BrasAngleToggle() == 3){
+    Robot.Brobot.BrasExtended2();
+    SmartDashboard.putNumber("positionBras", 3);
   }
 
 }
