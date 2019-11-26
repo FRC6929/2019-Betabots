@@ -134,7 +134,7 @@ public Boolean LightSwitch = true;
   boolean lightToggle(){
     
     /*if (m_stick.getRawButton(11)){*/
-      LightSwitch = false;
+      LightSwitch = true;
     /*}
     if (m_stick.getRawButton(12)){
       LightSwitch = true;

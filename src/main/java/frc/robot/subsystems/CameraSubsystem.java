@@ -41,5 +41,7 @@ public class CameraSubsystem extends Subsystem {
   public void Ferme(){
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
   }
-
+  public double ta(){
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+  }
 }

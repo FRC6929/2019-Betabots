@@ -43,6 +43,8 @@ public class AutoCommand extends Command {
     speed = 0;
     speedRot = 0;
     goodAngle = false;
+
+    
   }
 
   @Override
@@ -82,7 +84,7 @@ etape = 1;
       // Etape initiale
       // Avance
       case 1:
-      target = 560;
+      target = 500;
       targetRot = 0;
       
       break;
@@ -95,7 +97,7 @@ etape = 1;
 
       // Avance longtemps
       case 3:
-      target = 220;
+      target = 200;
       targetRot = 0;
       break;
 
@@ -108,20 +110,22 @@ etape = 1;
     // Mets a jour la position
 
     // Check si on atteint la target & s'occupe de la courbe d'acceleration
-    if(position < 32){
-        speed = 0.8;
+    if(position < 100){
+        speed = 1;
     }    
     else if(position >= 6 && position < target/2){
-      speed = position / 84 +0.15;
+      speed = position / 100;
     }
     else if(position >= target/2 && position < target - 6){
-      speed = ((target - position) / 84 + 0.15);
+      speed = ((target - position) / 100);
     }
-    else if(position >= target - 32 && position < target){
+    else if(position >= target - 90 && position < target){
       speed = 0.8;
     }
     
-
+    /*if(speed > 1.5){
+      speed = 1.5;
+    }*/
 
     //Rotation
     speedRot = (targetRot - positionRot)/ 360;
@@ -146,25 +150,29 @@ etape = 1;
       speed = 0;
       //speedRot = 0.5;
     }else{
-      
-      if(position > 0 && position < 80){
-        speedRot = speed/10;
+
+      if(position > 0 && position < 75){
+        speedRot = speed/10.7;
       }
     
-      if(position > 49 && position < 320 || position > 400 && position < 480){
+      if(position > 75.3 && position < 207 || position > 320 && position < 400){
         speedRot = speed/150;
       }
     
-      if(position > 320 && position < 400){
-        speedRot = speed/-40;
+      if(position > 207 && position < 320){
+        speedRot = speed/-20;
       }
 
-      if(position > 480 && position < 560){
+      if(position > 400 && position < 480){
         speedRot = speed/-40;
       }
     }
     // Fait bouger le robot
     Robot.m_drive.bougerAuto(0,speed/3,-speedRot); // side, forward,rotation
+  
+    
+
+    
   }     
   // Make this return true when this Command no longer needs to run execute()
   @Override

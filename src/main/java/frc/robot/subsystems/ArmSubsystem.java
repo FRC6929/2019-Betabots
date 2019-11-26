@@ -93,6 +93,8 @@ public class ArmSubsystem extends Subsystem {
         ArMotor.set(ControlMode.PercentOutput, -0.3);
       }
     }
-    
+  }
+  public double getArmEncoder(){
+      return testEncoder.getDistance();
   }
 }

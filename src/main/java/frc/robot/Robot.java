@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoArm;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.BougerCommand;
@@ -45,6 +46,7 @@ public class Robot extends TimedRobot {
   Command GimbalCommand;
   Command CameraLightOn;
   Command CameraLightOff;
+  Command AutoArm;
 
   //DigitalInput Switch;
 
@@ -59,6 +61,7 @@ public class Robot extends TimedRobot {
     AutoCommand = new AutoCommand();
     CameraLightOn = new CameraLightOn();
     CameraLightOff = new CameraLightOff();
+    AutoArm = new AutoArm();
     // Options
     m_chooser.addOption("Left", 1);
     m_chooser.addOption("Right", 2);
@@ -117,6 +120,7 @@ public class Robot extends TimedRobot {
     Robot.m_drive.reset();
     Robot.m_drive.resetAngle();
     AutoCommand.start();
+    AutoArm.start();
     //GimbalCommand.start();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
