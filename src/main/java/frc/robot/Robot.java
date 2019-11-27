@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoArm;
-//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.BougerCommand;
 import frc.robot.commands.CameraLightOff;
@@ -39,7 +37,6 @@ public class Robot extends TimedRobot {
   public static CameraSubsystem Camera = new CameraSubsystem();
   public static ChooserSubsystem Chooser = new ChooserSubsystem();
 
-  SendableChooser<Integer> m_chooser = new SendableChooser<>();
    
   Command BougerCommand;
   Command AutoCommand;
@@ -62,10 +59,7 @@ public class Robot extends TimedRobot {
     CameraLightOn = new CameraLightOn();
     CameraLightOff = new CameraLightOff();
     AutoArm = new AutoArm();
-    // Options
-    m_chooser.addOption("Left", 1);
-    m_chooser.addOption("Right", 2);
-    SmartDashboard.putData("Auto mode", m_chooser);
+    
 
     Robot.Brobot.BrasDefault();
     //Switch = new DigitalInput(2); 
