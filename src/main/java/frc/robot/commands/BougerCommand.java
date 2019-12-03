@@ -113,7 +113,10 @@ public class BougerCommand extends Command {
   }
   Robot.Stabilisateur.stabiliseY(accelerationY * 9 + 0.4);
   
-  
+  if(Robot.m_oi.BrasAngleToggle() == 0){
+    Robot.Brobot.BrasDefaultSlow();
+    SmartDashboard.putNumber("positionBras", 0);
+  }
   if(Robot.m_oi.BrasAngleToggle() == 1){
     Robot.Brobot.BrasDefault();
     SmartDashboard.putNumber("positionBras", 1);

@@ -112,6 +112,7 @@ public DriveTrainSubsystem(){
     }
     
     public double XPosition(){
+        SmartDashboard.putNumber("Xposition", e_rearLeft.getPosition() - e_rearRight.getPosition() / 2);
         return e_rearLeft.getPosition() - e_rearRight.getPosition() / 2;
     }
 

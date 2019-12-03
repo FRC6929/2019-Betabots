@@ -134,7 +134,7 @@ public Boolean LightSwitch = true;
   boolean lightToggle(){
     
     /*if (m_stick.getRawButton(11)){*/
-      LightSwitch = true;
+      LightSwitch = false;
     /*}
     if (m_stick.getRawButton(12)){
       LightSwitch = true;
@@ -144,6 +144,9 @@ public Boolean LightSwitch = true;
   }
   int BrasPosition = 1;
   public int BrasAngleToggle(){
+    if(m_stick2_electric_boogaloo.getRawButton(12)){
+      BrasPosition = 0;
+    }
     if(m_stick2_electric_boogaloo.getRawButton(11)){
       BrasPosition = 1;
     }

@@ -31,7 +31,7 @@ public class AutoArm extends Command {
     if(Robot.Camera.ta() > 20){
       
       Robot.Brobot.BrasExtended2();
-      if(Robot.Brobot.getArmEncoder() < -500){
+      if(Robot.Brobot.getSwitch2()){
         Robot.Stabilisateur.depose();
       }
     }

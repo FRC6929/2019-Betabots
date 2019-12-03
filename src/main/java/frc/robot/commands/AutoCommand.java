@@ -4,6 +4,7 @@ Cuivre et Or - 2019
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -12,7 +13,7 @@ import frc.robot.Robot;
 public class AutoCommand extends Command {
   public int etape;
 
-  public int target;
+  public double target;
   public int targetRot;
   
   public double speed;
@@ -30,10 +31,15 @@ public class AutoCommand extends Command {
   @Override
   protected void initialize()
   {
-    target = 135;
-    
+    if(Robot.Chooser.getChooser() == "Left"){
+      target = 153;
+    }
+    if(Robot.Chooser.getChooser() == "Right"){
+      target = 137;
+    }
     speed = 0;
     speedRot = 0; 
+    
   }
 
   @Override
@@ -45,17 +51,22 @@ public class AutoCommand extends Command {
     if(position < target - 1){
       speed = 1;
     }
-    if(position > target - 2 && position < target + 2){
+    if(position > target - 2 && position < target + 2 && target > 101){
       speed = 0;
       Robot.Brobot.BrasExtended2();
-      if(Robot.Brobot.getArmEncoder() < -500){
+      if(Robot.Brobot.getSwitch2()){
         Robot.Stabilisateur.depose();
-        Robot.Brobot.BrasDefault();
-        target = 0;
+        Timer.delay(0.5);
+        //Robot.Brobot.BrasDefault();
+        //target = 100;
       }
     }
     if(position > target + 2){
-      speed = -1;
+      speed = -1.5;
+    }
+    if(position > target - 2 && position < target + 2 && target == 100){
+      speed = 0;
+      //Robot.Brobot.BrasDefault();
     }
     
     SmartDashboard.putNumber("etape", etape);
@@ -66,20 +77,20 @@ public class AutoCommand extends Command {
     SmartDashboard.putNumber("Target", target);
     
       if(Robot.Chooser.getChooser() == "Right"){  
-        if(position >= 0 && position < 57){
+        if(position >= 0 && position < 40){
             speedRot = speed/10.7;
           }
         
-        if(position >= 57 && position < 150){
+        if(position >= 40 && position < 137){
           speedRot = speed/150;
         }
       }
       if(Robot.Chooser.getChooser() == "Left"){  
-        if(position >= 0 && position < 57){
+        if(position >= 0 && position < 59.5){
             speedRot = speed/-10.7 + speed/75;
           }
         
-        if(position >= 57 && position < 150){
+        if(position >= 58.5&& position < 154){
           speedRot = speed/150;
         }
       }

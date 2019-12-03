@@ -59,6 +59,7 @@ public class StabilisationSubsystem extends Subsystem {
   }
   public void depose(){
     servoX.set(1);
+    servoY.set(0.4);
   }
 }
 

@@ -28,11 +28,13 @@ public class ArmSubsystem extends Subsystem {
   //CANSparkMax ArMotor;
   Encoder testEncoder;
   DigitalInput Switch;
+  DigitalInput Switch2;
   VictorSPX ArMotor;
   public ArmSubsystem(){
     //ArMotor = new CANSparkMax(5, MotorType.kBrushed);
     testEncoder = new Encoder(0, 1);
-    Switch = new DigitalInput(2); 
+    Switch = new DigitalInput(2);
+    Switch2 = new DigitalInput(3);
     ArMotor = new VictorSPX(0);
     ArMotor.setInverted(true);
   }
@@ -48,30 +50,37 @@ public class ArmSubsystem extends Subsystem {
   public void BrasExtended1(){
     SmartDashboard.putNumber("encTest", testEncoder.getDistance());
     SmartDashboard.putBoolean("Extended", true);
-    
+    SmartDashboard.putBoolean("Switch2", Switch2.get());
+
     if(testEncoder.getDistance() < -400){
     ArMotor.set(ControlMode.PercentOutput, 0);
     }
-    else{
+    if(testEncoder.getDistance() < -300 && testEncoder.getDistance() >= -400){
+      ArMotor.set(ControlMode.PercentOutput, 0.15);
+    }
+    if(testEncoder.getDistance() >= -300){
       ArMotor.set(ControlMode.PercentOutput, 0.3);
     }
   }
   public void BrasExtended2(){
     SmartDashboard.putNumber("encTest", testEncoder.getDistance());
     SmartDashboard.putBoolean("Extended", true);
-    
+    SmartDashboard.putBoolean("Switch2", Switch2.get());
         
-    if(testEncoder.getDistance() < -500){
+    if(testEncoder.getDistance() < -515 || !Switch2.get()){
       ArMotor.set(ControlMode.PercentOutput, 0);
     }
-    else{
+    if(testEncoder.getDistance() < -425 && testEncoder.getDistance() >= -515){
+      ArMotor.set(ControlMode.PercentOutput, 0.15);
+    }
+    if(testEncoder.getDistance() >= -425){
       ArMotor.set(ControlMode.PercentOutput, 0.3);
     }
   }
   public void BrasDefault(){  
     SmartDashboard.putNumber("encTest", testEncoder.getDistance());
     SmartDashboard.putBoolean("Extended", false);
-    
+    SmartDashboard.putBoolean("Switch2", Switch2.get());
     
     if(testEncoder.getDistance() > 10){
       ArMotor.set(ControlMode.PercentOutput, 0);
@@ -94,7 +103,38 @@ public class ArmSubsystem extends Subsystem {
       }
     }
   }
+
+public void BrasDefaultSlow(){  
+  SmartDashboard.putNumber("encTest", testEncoder.getDistance());
+  SmartDashboard.putBoolean("Extended", false);
+  SmartDashboard.putBoolean("Switch2", Switch2.get());
+  
+  if(testEncoder.getDistance() > 10){
+    ArMotor.set(ControlMode.PercentOutput, 0);
+  }
+  
+  if(!Switch.get()){
+    SmartDashboard.putBoolean("switch", false);
+    ArMotor.set(ControlMode.PercentOutput, 0);
+    testEncoder.reset();
+  }  
+  if(Switch.get()){
+    SmartDashboard.putBoolean("switch", true);
+    
+    if(testEncoder.getDistance() < -100){
+      ArMotor.set(ControlMode.PercentOutput, -0.3);
+    }
+    if(testEncoder.getDistance() > -100 && testEncoder.getDistance() < 10){
+      ArMotor.set(ControlMode.PercentOutput, -0.2);
+    }
+  }
+}
+
   public double getArmEncoder(){
       return testEncoder.getDistance();
+  }
+  public boolean getSwitch2(){
+    SmartDashboard.putBoolean("Switch2", Switch2.get());
+    return !Switch2.get();
   }
 }
