@@ -35,6 +35,7 @@ public DriveTrainSubsystem(){
         m_rearLeft.setIdleMode(IdleMode.kBrake);
         m_frontRight.setIdleMode(IdleMode.kBrake);
         m_rearRight.setIdleMode(IdleMode.kBrake);
+        m_frontRight.setInverted(false);
         
         e_frontLeft = new CANEncoder(m_frontLeft);
         e_rearLeft = new CANEncoder(m_rearLeft);

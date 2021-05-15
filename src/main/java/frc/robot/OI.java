@@ -91,7 +91,8 @@ public Boolean LightSwitch = true;
   public  double getAxisX()
   {
     double y = 0;
-    y = m_stick.getRawAxis(0);
+    y = 0//m_stick.getRawAxis(0)
+    ;
     //y = filterAxis(y, 0.1);
     //if(y <0.1 && y>-0.1){y=0;}
     return y*y*y/1.4;

@@ -68,7 +68,8 @@ public class BougerCommand extends Command {
   Robot.m_drive.bouger(OIX, Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ());    
   }
   if(Robot.m_oi.fieldSwitch()==true){
-  Robot.m_drive.bougerField(Robot.m_oi.getAxisX(), Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ());
+  Robot.m_drive.bougerField(Robot.m_oi.getAxisX()
+  , Robot.m_oi.getAxisY(), Robot.m_oi.getAxisZ());
 
   }
 /*
